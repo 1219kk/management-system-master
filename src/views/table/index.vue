@@ -5,12 +5,14 @@
       <el-form :inline="true" class="table-form">
         <el-form-item>
           <el-input
-            v-model="searchUsers"
+            v-model="paramsObj.query"
+            clearable
             placeholder="请输入内容"
             class="form-width"
+            @keyup.enter.native="getTableList"
           >
             <template slot="append">
-              <el-button icon="el-icon-search" @click="searchUser" />
+              <el-button icon="el-icon-search" @click="getTableList" />
             </template>
           </el-input>
         </el-form-item>
@@ -27,15 +29,15 @@
         <el-table-column prop="username" label="姓名" width="180" />
         <el-table-column prop="mobile" label="电话" width="180" />
         <el-table-column prop="role_name" label="角色" width="180" />
-        <el-table-column prop="mg_state" label="状态" width="180">
+        <el-table-column prop="type" label="状态" width="180">
           <template slot-scope="{ row }">
             <!-- active-value  打开
           inactive-value 关闭-->
             <el-switch
-              v-model="row.state"
+              v-model="row.mg_state"
               :active-value="true"
               :inactive-value="false"
-              @change="changeState(state)"
+              @change="changeState(row)"
             />
           </template>
         </el-table-column>
@@ -98,7 +100,8 @@
 </template>
 
 <script>
-import { getTableList, addUsers, editUsers, queryUsers } from '@/api/user'
+// queryUsers
+import { getTableList, addUsers, editUsers, editType } from '@/api/user'
 export default {
   filters: {},
   components: {},
@@ -108,7 +111,7 @@ export default {
       paramsObj: {
         pagenum: 1, // 当前页码
         pagesize: 4, // 每页显示条数
-        query: ''
+        query: '' // 查询条件
       },
       total: null,
       getroleList: [],
@@ -138,7 +141,10 @@ export default {
         }]
       },
       addDialogVisible: false,
-      searchUsers: ''
+      searchUsers: '',
+
+      uId: '',
+      state: true
 
     }
   },
@@ -146,37 +152,42 @@ export default {
   watch: {},
   created () {
     this.getTableList()
-    this.searchUser()
+    // this.searchUser()
+    this.editMyType()
   },
   methods: {
     changeState (row) {
       this.$confirm('是否处理权限?', '提示', {
-        confirmButtonText: '确定',
+        confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '更改成功!'
-        })
-      }).catch(() => {
-        if (row.state === 1) {
-          row.state = 0
-        } else {
-          row.state = 1
-        }
       })
-    },
-    open () {
-      this.$alert('这是一段内容', '标题名称', {
-        confirmButtonText: '确定',
-        callback: action => {
-          this.$message({
-            type: 'info',
-            message: `action: ${action}`
+        // 点击确认【confirmButtonText】
+        .then(() => {
+          editType({
+            id: row.id,
+            type: row.mg_state
+          }).then(res => {
+            const { meta } = res.data
+            const { msg, status } = meta
+            // let status = res.data.meta.status
+            // let msg = res.data.meta.msg
+            if (status === 200) {
+              this.$message.success(msg)
+            } else {
+              this.$message.error(msg)
+              row.mg_state = !row.mg_state
+            }
           })
-        }
-      })
+        })
+        // 点击取消【cancelButtonText】
+        .catch(() => {
+          row.mg_state = !row.mg_state
+        })
+    },
+    async editMyType () {
+      const res = await editType(this.dataType)
+      console.log(res)
     },
 
     async getTableList () {
@@ -226,13 +237,8 @@ export default {
       this.form = {}
       this.type = 'add'
       this.addDialogVisible = true
-    },
-    async searchUser () {
-      const res = await queryUsers(this.id)
-      // this.paramsObj = this.searchUser
-      // this.searchUser = res.data.data.id
-      console.log(res)
     }
+
   }
 }
 </script>

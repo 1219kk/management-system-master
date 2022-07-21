@@ -64,3 +64,11 @@ export const queryUsers = (id) => {
     params: id
   })
 }
+
+// 修改用户状态
+export const editType = ({ id, type }) => {
+  return request({
+    method: 'PUT',
+    url: `users/${id}/state/${type}`
+  })
+}

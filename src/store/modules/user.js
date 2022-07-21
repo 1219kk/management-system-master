@@ -1,7 +1,7 @@
 // // 模块化vuex
 import { login } from '@/api/user'
 // import { Message } from 'element-ui'
-import { setToken, getToken } from '@/utils/auth'
+import { setToken, getToken, removeToken } from '@/utils/auth'
 const state = {
   // 防止刷新页面token没了
   token: getToken() || ''
@@ -9,6 +9,13 @@ const state = {
 const mutations = {
   setToken (state, token) {
     state.token = token
+  },
+  removeToken (state) {
+    state.token = null
+    removeToken()
+  },
+  removeUserInfo (state) {
+    state.userInfo = {}
   }
 }
 const actions = {
@@ -28,6 +35,10 @@ const actions = {
       // Message.error('登录失败')
       return Promise.reject(new Error('登录失败，请重新登录'))
     }
+  },
+  logout (context) {
+    context.commit('removeToken')
+    context.commit('removeUserInfo')
   }
 }
 export default {
