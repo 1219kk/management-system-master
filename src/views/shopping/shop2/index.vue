@@ -15,6 +15,7 @@
           <el-cascader
             v-model="value"
             :options="options"
+            :props="addprops"
             @change="handleChange"
           />
         </div>
@@ -37,6 +38,7 @@
 <script>
 import DynamicParameter from './components/DynamicParameter.vue'
 import StaticProperties from './components/StaticProperties.vue'
+import { addCategories } from '@/api/shop'
 export default {
   filters: {},
   components: { DynamicParameter, StaticProperties },
@@ -44,35 +46,31 @@ export default {
     return {
       activeName: 'first',
       value: [],
-      options: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [{
-          value: 'shejiyuanze',
-          label: '设计原则',
-          children: [{
-            value: 'yizhi',
-            label: '一致'
-          }, {
-            value: 'fankui',
-            label: '反馈'
-          }, {
-            value: 'xiaolv',
-            label: '效率'
-          }, {
-            value: 'kekong',
-            label: '可控'
-          }]
-        }]
-      }]
+      options: [],
+      children: null,
+      addprops: {
+        label: 'cat_name',
+        value: 'cat_pid',
+        children: 'children'
+      },
+      dataObj: {
+        cat_pid: '',
+        cat_name: '',
+        cat_level: ''
+      }
+
     }
   },
   computed: {},
   watch: {},
-  created () { },
+  created () { this.addCategories() },
   methods: {
     handleChange (value) {
       console.log(value)
+    },
+    async addCategories () {
+      const res = await addCategories(this.dataObj)
+      console.log(res)
     }
   }
 }
