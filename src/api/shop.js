@@ -11,13 +11,10 @@ export const getGoods = ({ query, pagenum, pagesize }) => {
 }
 
 // 添加分类
-export const addCategories = ({ cat_pid, cat_name, cat_level }) => {
+export const addCategories = (params) => {
   return request({
-    method: 'POST',
+    method: 'GET',
     url: '/categories',
-    params: {
-      cat_pid, cat_name, cat_level
-
-    }
+    params
   })
 }

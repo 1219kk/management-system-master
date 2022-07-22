@@ -115,4 +115,7 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+.app-container {
+  width: 100%;
+}
 </style>

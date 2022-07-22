@@ -50,11 +50,11 @@ export default {
       children: null,
       addprops: {
         label: 'cat_name',
-        value: 'cat_pid',
+        value: 'cat_id',
         children: 'children'
       },
       dataObj: {
-        cat_pid: '',
+        cat_id: '',
         cat_name: '',
         cat_level: ''
       }
@@ -71,6 +71,7 @@ export default {
     async addCategories () {
       const res = await addCategories(this.dataObj)
       console.log(res)
+      this.options = res.data.data
     }
   }
 }
