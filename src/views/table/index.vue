@@ -133,6 +133,7 @@ export default {
           required: true, message: '请输入密码', trigger: 'blur'
         },
         { min: 2, max: 7, message: '密码在2-7之间', trigger: 'blur' }],
+
         email: [{
           required: true, message: '邮箱不能为空', trigger: 'blur'
         }],
@@ -153,7 +154,7 @@ export default {
   created () {
     this.getTableList()
     // this.searchUser()
-    this.editMyType()
+    // this.editMyType()
   },
   methods: {
     changeState (row) {
@@ -185,10 +186,10 @@ export default {
           row.mg_state = !row.mg_state
         })
     },
-    async editMyType () {
-      const res = await editType(this.dataType)
-      console.log(res)
-    },
+    // async editMyType () {
+    //   const res = await editType(this.dataType)
+    //   console.log(res)
+    // },
 
     async getTableList () {
       const res = await getTableList(this.paramsObj)

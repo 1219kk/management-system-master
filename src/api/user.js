@@ -66,9 +66,9 @@ export const queryUsers = (id) => {
 }
 
 // 修改用户状态
-export const editType = ({ id, type }) => {
+export const editType = ({ uId, type }) => {
   return request({
     method: 'PUT',
-    url: `users/${id}/state/${type}`
+    url: `users/${uId}/state/${type}`
   })
 }

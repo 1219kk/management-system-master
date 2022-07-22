@@ -6,17 +6,13 @@
           <el-table-column type="index" label="#" width="100px" />
           <el-table-column prop="authName" label="权限名称" width="265px" />
           <el-table-column prop="path" label="路径" width="261px" />
-          <el-table-column prop="describe" label="权限等级" width="500px">
-            <template>
-              <el-button type="primary" icon="el-icon-edit" size="mini">
-                编辑
-              </el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini">
-                删除
-              </el-button>
-              <el-button type="warning" icon="el-icon-star-off" size="mini">
-                分配权限
-              </el-button>
+          <el-table-column prop="level" label="权限等级" width="500px">
+            <template slot-scope="scope">
+              <el-tag v-if="scope.row.level == 0"> 等级一 </el-tag>
+              <el-tag v-else-if="scope.row.level == 1" type="success">
+                等级二
+              </el-tag>
+              <el-tag v-else type="warning">等级三</el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -26,25 +22,40 @@
 </template>
 
 <script>
-import { getMenus } from '@/api/manage'
+import { getList, getMenus } from '@/api/manage'
 export default {
   filters: {},
   components: {},
   data () {
     return {
-      authName: '',
+      paramsObj: {
+        authName: '',
+        path: '',
+        level: ''
+
+      },
       getManageList: []
     }
   },
   computed: {},
   watch: {},
-  created () { this.getMenus() },
+  created () {
+    this.getMenus()
+    this.getList()
+  },
   methods: {
     async getMenus () {
-      const res = await getMenus(this.authName)
+      const res = await getMenus()
       console.log(res)
-      this.getManageList = res.data.data.data
+      // this.getManageList = res.data.data.data
+    },
+    async getList () {
+      const res = await getList(this.paramsObj)
+      console.log(res)
+      this.getManageList = res.data.data
+      this.level = res.data.data.level
     }
+
   }
 }
 </script>

@@ -7,3 +7,9 @@ export const getMenus = (params) => {
     params
   })
 }
+
+export const getList = () => {
+  return request({
+    url: '/rights/list'
+  })
+}
