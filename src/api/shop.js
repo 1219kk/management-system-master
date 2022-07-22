@@ -11,10 +11,10 @@ export const getGoods = ({ query, pagenum, pagesize }) => {
 }
 
 // 添加分类
-export const addCategories = (data) => {
+export const addCategories = (params) => {
   return request({
     method: 'GET',
     url: '/categories',
-    data
+    params
   })
 }

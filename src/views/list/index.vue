@@ -14,15 +14,22 @@
         </el-form>
         <el-table border class="tableall" :data="getMylist">
           <el-table-column type="index" width="50" label="#" />
-          <el-table-column prop="goods_name" label="订单编号" width="180" />
+          <el-table-column prop="order_number" label="订单编号" width="180" />
           <el-table-column
-            prop="goods_number"
+            prop="order_price"
             label="订单价格(元)"
             width="180"
           />
-          <el-table-column prop="goods_weight" label="是否付款" width="180" />
-          <el-table-column prop="upd_time" label="是否发货" width="180" />
-          <el-table-column prop="upd_time" label="下单时间" width="180" />
+          <el-table-column prop="order_pay" label="是否付款" width="180">
+            <el-button>1</el-button>
+          </el-table-column>
+          <el-table-column prop="is_send" label="是否发货" width="180" />
+          <el-table-column
+            prop="update_time"
+            label="下单时间"
+            width="180"
+            :formatter="formatDate"
+          />
           <el-table-column prop="operation" label="操作">
             <template>
               <el-button type="primary" icon="el-icon-edit" size="mini">
@@ -37,8 +44,7 @@
           :page-size="dataObj.pagesize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
-        >
-        </el-pagination>
+        />
       </el-card>
     </div>
   </div>
@@ -56,16 +62,35 @@ export default {
         pagenum: 1,
         pagesize: 4
       },
-      total: null
+      total: null,
+      getMylist: []
     }
   },
   computed: {},
   watch: {},
-  created () { this.getMyList() },
+  created () {
+    this.getMyList()
+  },
   methods: {
     async getMyList () {
       const res = await getMyList(this.dataObj)
       console.log(res)
+      this.getMylist = res.data.data.goods
+      this.total = res.data.data.total
+    },
+    // 当前时间
+    formatDate (row) {
+      const date = new Date(row['update_time'] * 1000)
+      console.log(date)
+      console.log(row)
+      console.log(row['update_time'])
+      const Y = date.getFullYear() + '-'
+      const M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-'
+      const D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' '
+      // const h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':'
+      // const m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':'
+      // const s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+      return Y + M + D
     }
   }
 }
