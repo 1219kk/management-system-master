@@ -12,7 +12,7 @@
           </el-form-item>
           <el-form-item />
         </el-form>
-        <el-table border class="tableall">
+        <el-table border class="tableall" :data="getMylist">
           <el-table-column type="index" width="50" label="#" />
           <el-table-column prop="goods_name" label="订单编号" width="180" />
           <el-table-column
@@ -31,6 +31,14 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-pagination
+          :current-page="dataObj.pagenum"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="dataObj.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        >
+        </el-pagination>
       </el-card>
     </div>
   </div>
@@ -47,7 +55,8 @@ export default {
         query: '',
         pagenum: 1,
         pagesize: 4
-      }
+      },
+      total: null
     }
   },
   computed: {},

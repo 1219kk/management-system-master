@@ -141,7 +141,7 @@ const asyncRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/order/list/index'), // Parent router-view
+        component: () => import('@/views/list/index'), // Parent router-view
         name: 'List',
         meta: { title: '订单列表', icon: 'el-icon-menu' }
       }
