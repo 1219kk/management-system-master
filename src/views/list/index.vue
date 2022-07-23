@@ -21,7 +21,16 @@
             width="180"
           />
           <el-table-column prop="order_pay" label="是否付款" width="180">
-            <el-button>1</el-button>
+            <template slot-scope="scope">
+              <el-tag
+                v-if="scope.row.order_pay == 0"
+                type="danger"
+                effect="dark"
+              >
+                未支付
+              </el-tag>
+              <el-tag v-else type="success" effect="dark"> 已支付 </el-tag>
+            </template>
           </el-table-column>
           <el-table-column prop="is_send" label="是否发货" width="180" />
           <el-table-column
@@ -44,6 +53,8 @@
           :page-size="dataObj.pagesize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
         />
       </el-card>
     </div>
@@ -91,6 +102,12 @@ export default {
       // const m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':'
       // const s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
       return Y + M + D
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
     }
   }
 }
