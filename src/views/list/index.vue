@@ -103,11 +103,15 @@ export default {
       // const s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
       return Y + M + D
     },
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+    handleSizeChange (pagesize) {
+      console.log(pagesize)
+      this.dataObj.pagesize = pagesize
+      this.getMyList()
     },
-    handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+    handleCurrentChange (pagenum) {
+      console.log(pagenum)
+      this.dataObj.pagenum = pagenum
+      this.getMyList()
     }
   }
 }
