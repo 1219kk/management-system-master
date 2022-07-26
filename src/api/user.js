@@ -44,6 +44,15 @@ export const addUsers = ({ username, password, email, mobile }) => {
   })
 }
 
+// 删除单个用户
+export const delUsers = (id) => {
+  return request({
+    method: 'DELETE',
+    url: `users/${id}`
+
+  })
+}
+
 // . 编辑用户提交
 export const editUsers = ({ id, email, mobile }) => {
   return request({

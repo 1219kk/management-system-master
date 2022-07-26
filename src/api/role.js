@@ -6,3 +6,11 @@ export const getRoles = (params) => {
     params
   })
 }
+// 删除角色
+
+export const delRoles = (id) => {
+  return request({
+    method: 'DELETE',
+    url: `roles/${id}`
+  })
+}

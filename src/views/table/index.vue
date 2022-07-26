@@ -48,7 +48,11 @@
               icon="el-icon-edit"
               @click="handleEdit(scope.$index, scope.row)"
             />
-            <el-button type="danger" icon="el-icon-delete" />
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              @click="del(scope.row.id)"
+            />
             <el-button type="warning" icon="el-icon-setting" />
           </template>
         </el-table-column>
@@ -101,7 +105,7 @@
 
 <script>
 // queryUsers
-import { getTableList, addUsers, editUsers, editType } from '@/api/user'
+import { getTableList, addUsers, editUsers, editType, delUsers } from '@/api/user'
 export default {
   filters: {},
   components: {},
@@ -186,11 +190,6 @@ export default {
           row.mg_state = !row.mg_state
         })
     },
-    // async editMyType () {
-    //   const res = await editType(this.dataType)
-    //   console.log(res)
-    // },
-
     async getTableList () {
       const res = await getTableList(this.paramsObj)
       console.log(res)
@@ -238,7 +237,31 @@ export default {
       this.form = {}
       this.type = 'add'
       this.addDialogVisible = true
+    },
+    // 删除
+    del (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        await delUsers(id)
+        if (this.getroleList.length === 1 && this.paramsObj.pagenum > 1) {
+          this.paramsObj.pagenum--
+        }
+        this.getTableList()
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
+    // 分配权限
 
   }
 }

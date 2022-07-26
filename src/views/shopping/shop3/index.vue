@@ -2,73 +2,99 @@
   <el-card style="margin: 20px">
     <el-button type="primary" style="margin: 10px">添加分类</el-button>
     <el-table
-      :data="tableData1"
-      style="width: 100%; margin: 10px"
-      row-key="id"
+      :data="addCategoriesTable"
+      style="width: 100%; margin-bottom: 20px"
+      row-key="cat_id"
       border
-      lazy
-      :load="load"
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
     >
-      <el-table-column prop="date" label="日期" width="180" />
-      <el-table-column prop="name" label="姓名" width="180" />
-      <el-table-column prop="address" label="地址" />
+      <el-table-column type="index" label="#" />
+      <el-table-column prop="cat_name" label="分类名称" />
+      <el-table-column prop="cat_pid" label="是否有效">
+        <i class="el-icon-success" style="font-size: 5px; color: green" />
+      </el-table-column>
+      <el-table-column prop="cat_level" label="排序">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.cat_level == 0">一级</el-tag>
+          <el-tag v-else-if="scope.row.cat_level == 1" type="success">
+            二级
+          </el-tag>
+          <el-tag v-else type="warning">三级</el-tag>
+        </template>
+      </el-table-column>
     </el-table>
+
+    <el-pagination
+      :current-page="paramsObj.pagenum"
+      :page-sizes="[5, 10, 15, 20]"
+      :page-size="paramsObj.pagesize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
   </el-card>
 </template>
 
 <script>
+import { getCategories } from '@/api/shop'
 export default {
   filters: {},
   components: {},
   data () {
     return {
-      tableData1: [{
-        id: 1,
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄',
-        hasChildren: true
-      }]
+      paramsObj: {
+        pagenum: 1,
+        pagesize: 4
+      },
+      total: null,
+      addCategoriesTable: []
     }
   },
   computed: {},
   watch: {},
-  created () { },
+  created () {
+    this.getCategories()
+  },
   methods: {
-    load (tree, treeNode, resolve) {
-      setTimeout(() => {
-        resolve([
-          {
-            id: 11,
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄',
-            children: [{
-              id: 21,
-              date: '2016-05-01',
-              name: '王小虎',
-              address: '上海市普陀区金沙江路 1519 弄',
-              hasChildren: true
-            }]
-          }, {
-            id: 12,
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }, {
-            id: 13,
-            date: '2016-05-01',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1519 弄'
-          }
-        ])
-      }, 100)
+    async getCategories () {
+      const res = await getCategories(this.paramsObj)
+      console.log(res)
+      this.addCategoriesTable = res.data.data.result
+      this.total = res.data.data.total
+    },
+    handleSizeChange (pagesize) {
+      console.log(pagesize)
+      this.paramsObj.pagesize = pagesize
+      this.addCategoriesTable()
+    },
+    handleCurrentChange (pagenum) {
+      console.log(pagenum)
+      this.paramsObj.pagenum = pagenum
+      this.addCategoriesTable()
     }
+
   }
 }
 
 </script>
 
 <style scoped lang='scss'>
+::v-deep .el-icon-arrow-right:before {
+  content: "\e6d9";
+}
+
+::v-deep .el-table__expand-icon--expanded .el-icon-arrow-right:before {
+  content: "\e6d8" !important;
+}
+
+::v-deep .el-table__expand-icon--expanded {
+  -webkit-transform: rotate(0deg);
+
+  transform: rotate(0deg);
+}
+::v-deep .el-table__expand-icon {
+  border: 1px solid #e7e7e7;
+  padding: 1px;
+}
 </style>

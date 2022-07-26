@@ -3,10 +3,10 @@
     <div class="app-container">
       <el-card style:margin-top="10px">
         <el-table border :data="getManageList">
-          <el-table-column type="index" label="#" width="100px" />
-          <el-table-column prop="authName" label="权限名称" width="265px" />
-          <el-table-column prop="path" label="路径" width="261px" />
-          <el-table-column prop="level" label="权限等级" width="500px">
+          <el-table-column type="index" label="#" />
+          <el-table-column prop="authName" label="权限名称" />
+          <el-table-column prop="path" label="路径" />
+          <el-table-column prop="level" label="权限等级">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.level == 0"> 等级一 </el-tag>
               <el-tag v-else-if="scope.row.level == 1" type="success">

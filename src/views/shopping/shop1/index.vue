@@ -34,12 +34,17 @@
             width="180"
             :formatter="formatDate"
           />
-          <el-table-column prop="operation" label="操作">
-            <template>
+          <el-table-column prop="goods_id" label="操作">
+            <template v-slot="scope">
               <el-button type="primary" icon="el-icon-edit" size="mini">
                 编辑
               </el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini">
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                size="mini"
+                @click="del(scope.row.goods_id)"
+              >
                 删除
               </el-button>
             </template>
@@ -60,7 +65,7 @@
   </div>
 </template>
 <script>
-import { getGoods } from '@/api/shop'
+import { getGoods, delGoods } from '@/api/shop'
 export default {
   filters: {},
   components: {},
@@ -94,6 +99,30 @@ export default {
       console.log(pagenum)
       this.paramsObj.pagenum = pagenum
       this.getGoods()
+    },
+    // 删除
+    del (goods_id) {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        console.log(this.id)
+        await delGoods(goods_id)
+        this.getGoods()
+        // if (this.getgoodList.length === 1 && this.paramsObj.pagenum > 1) {
+        //   this.paramsObj.pagenum--
+        // }
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
     // 当前时间
     formatDate (row) {

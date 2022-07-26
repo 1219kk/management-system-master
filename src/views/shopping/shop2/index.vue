@@ -38,7 +38,7 @@
 <script>
 import DynamicParameter from './components/DynamicParameter.vue'
 import StaticProperties from './components/StaticProperties.vue'
-import { addCategories } from '@/api/shop'
+import { getCategories } from '@/api/shop'
 export default {
   filters: {},
   components: { DynamicParameter, StaticProperties },
@@ -63,13 +63,13 @@ export default {
   },
   computed: {},
   watch: {},
-  created () { this.addCategories() },
+  created () { this.getCategories() },
   methods: {
     handleChange (value) {
       console.log(value)
     },
-    async addCategories () {
-      const res = await addCategories(this.dataObj)
+    async getCategories () {
+      const res = await getCategories(this.dataObj)
       console.log(res)
       this.options = res.data.data
     }
