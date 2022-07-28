@@ -13,7 +13,7 @@
           </el-form-item>
           <el-form-item>
             <template>
-              <el-button type="primary">添加商品</el-button>
+              <el-button type="primary" @click="back">添加商品</el-button>
             </template>
           </el-form-item>
         </el-form>
@@ -137,6 +137,10 @@ export default {
       // const m = date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':'
       // const s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
       return Y + M + D
+    },
+    // 页面跳转
+    back () {
+      this.$router.push({ name: 'Steps' })
     }
   }
 

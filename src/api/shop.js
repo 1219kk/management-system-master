@@ -36,3 +36,21 @@ export const delGoods = (id) => {
     url: `goods/${id}`
   })
 }
+
+// shop1添加商品
+export const addGoods = (data) => {
+  return request({
+    method: 'POST',
+    url: 'post',
+    data
+  })
+}
+
+// shop3添加分类
+export const addCategories = (data) => {
+  return request({
+    method: 'POST',
+    url: 'categories',
+    data
+  })
+}

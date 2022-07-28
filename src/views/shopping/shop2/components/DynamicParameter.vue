@@ -1,7 +1,8 @@
 <template>
   <div>
     <el-button type="primary">添加参数</el-button>
-    <el-table :data="getroleList" border>
+    <!-- :data="getroleList" -->
+    <el-table border>
       <el-table-column type="expand" label="" />
       <el-table-column type="index" label="#" />
       <el-table-column prop="attr_name" label="分类名称" />

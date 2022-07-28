@@ -195,6 +195,7 @@ module.exports = {
     }],
     'array-bracket-spacing': [2, 'never'],
     'space-before-function-paren': 0,
-    'vue/html-closing-bracket-newline': 0
+    'vue/html-closing-bracket-newline': 0,
+    'vue/attribute-hyphenation': 0
   }
 }

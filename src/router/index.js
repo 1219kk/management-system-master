@@ -114,6 +114,12 @@ const asyncRoutes = [
         name: 'Shop1',
         meta: { title: '商品列表', icon: 'el-icon-menu' }
       },
+      // 跳转
+      {
+        path: 'shop1/steps',
+        component: () => import('@/views/shopping/shop1/components/ShopSteps.vue'),
+        name: 'Steps'
+      },
       {
         path: 'shop2',
         component: () => import('@/views/shopping/shop2/index'),

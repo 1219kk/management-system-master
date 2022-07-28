@@ -104,7 +104,7 @@
 </template>
 
 <script>
-// queryUsers
+
 import { getTableList, addUsers, editUsers, editType, delUsers } from '@/api/user'
 export default {
   filters: {},

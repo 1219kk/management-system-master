@@ -14,3 +14,25 @@ export const delRoles = (id) => {
     url: `roles/${id}`
   })
 }
+
+// 编辑角色
+export const editRoles = ({ id, roleName, roleDesc }) => {
+  return request({
+    method: 'PUT',
+    url: `roles/${id}`,
+    data: {
+      roleName, roleDesc
+    }
+  })
+}
+
+// 添加角色
+export const addRoles = ({ roleName, roleDesc }) => {
+  return request({
+    method: 'POST',
+    url: 'roles',
+    data: {
+      roleName, roleDesc
+    }
+  })
+}

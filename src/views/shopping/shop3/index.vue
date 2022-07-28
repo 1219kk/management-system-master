@@ -1,6 +1,8 @@
 <template>
   <el-card style="margin: 20px">
-    <el-button type="primary" style="margin: 10px">添加分类</el-button>
+    <el-button type="primary" style="margin: 10px" @click="handleAdd">
+      添加分类
+    </el-button>
     <el-table
       :data="addCategoriesTable"
       style="width: 100%; margin-bottom: 20px"
@@ -33,22 +35,61 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+    <!-- 添加分类 -->
+    <el-dialog :visible.sync="addCategorie" title="添加">
+      <el-form ref="myForm" label-width="80px" :model="form" :rules="rules">
+        <el-form-item label="分类名称" prop="cat_name">
+          <el-input v-model="form.cat_name" />
+        </el-form-item>
+        <!-- <el-form-item label="是否有效" prop="cat_pid">
+          <el-input v-model="form.cat_pid" />
+        </el-form-item> -->
+        <el-form-item label="排序" prop="cat_level">
+          <el-input v-model="form.cat_level" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button type="primary" @click="onClick">确定</el-button>
+        <el-button @click="addCategorie = false">取消</el-button>
+      </template>
+    </el-dialog>
   </el-card>
 </template>
 
 <script>
-import { getCategories } from '@/api/shop'
+import { getCategories, addCategories } from '@/api/shop'
 export default {
   filters: {},
   components: {},
   data () {
     return {
       paramsObj: {
+        type: null,
         pagenum: 1,
         pagesize: 4
       },
       total: null,
-      addCategoriesTable: []
+      addCategoriesTable: [],
+      addCategorie: false,
+      form: {
+        cat_name: '',
+        // cat_pid: '',
+        cat_level: ''
+      },
+      rules: {
+        cat_name: [
+          { required: true, message: '请填写分类名称', tirgger: 'blur' }
+        ],
+        // cat_pid: [
+        //   { required: true, message: '请填写是否有效', tirgger: 'blur' }
+        // ],
+        cat_level: [
+          { required: true, message: '请填写排序情况', tirgger: 'blur' },
+          { min: 1, max: 1, message: '请填写0,1,2描述情况', tirgger: 'blur' }
+        ]
+
+      }
+
     }
   },
   computed: {},
@@ -66,12 +107,25 @@ export default {
     handleSizeChange (pagesize) {
       console.log(pagesize)
       this.paramsObj.pagesize = pagesize
-      this.addCategoriesTable()
+      this.getCategories()
     },
     handleCurrentChange (pagenum) {
       console.log(pagenum)
       this.paramsObj.pagenum = pagenum
-      this.addCategoriesTable()
+      this.getCategories()
+    },
+    onClick () {
+      this.$refs.myForm.validate(async valid => {
+        if (!valid) return this.$message.error('表单数据非法')
+        await addCategories(this.form)
+        // 重置
+        this.getCategories()
+        this.addCategorie = false
+      })
+    },
+    handleAdd () {
+      this.form = {}
+      this.addCategorie = true
     }
 
   }
