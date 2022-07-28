@@ -54,3 +54,11 @@ export const addCategories = (data) => {
     data
   })
 }
+
+// shop1编辑
+export const editGoods = (data) => {
+  return request({
+    method: 'PUT',
+    url: `goods/${data.id}`
+  })
+}
